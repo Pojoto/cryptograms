@@ -4,8 +4,8 @@ class Unit:
 
     def __init__(self, window, char):
         self.char = char
-        self.frame = Frame(window, width=30, height=50)
-        self.frame.pack()
+        self.frame = Frame(window, width=30, height=100)
+        self.frame.pack(side=LEFT)
         self.entry_text = StringVar()
         print(self.entry_text.get())
         self.entry = Entry(self.frame, width=3, textvariable=self.entry_text)
