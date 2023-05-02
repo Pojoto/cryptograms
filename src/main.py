@@ -12,10 +12,19 @@ text = "hello there"
 
 cryptogram = Cryptogram(root, text)
 
-# entry1 = Entry(root, width = 5)
+
+# entry_text = StringVar()
+
+
+# entry1 = Entry(root, width = 5, textvariable=entry_text)
 # entry2 = Entry(root, width = 5)
 
 # entry1.pack(side=LEFT, pady=5, padx=5)
+
+# entry_text.trace_add("write", lambda *args: character_limit(entry_text))
+
+#TODO: make sure you only let user type one letter at a time
+
 # entry2.pack(side=LEFT, pady=5, padx=5)
 
 #entry.place(relx = 0.5, rely=0.5, anchor=CENTER)
