@@ -18,18 +18,24 @@ def test_entry(entry_text):
 
 class Cryptogram:
     
-    def __init__(self, window, text):
-        self.text = text
-        self.window = window
+    def __init__(self, window, ciphertext, plaintext):
+        self.ciphertext = ciphertext
+        self.plaintext = plaintext
+        self.frame = Frame(window)
+        self.frame.pack(expand=True, fill=X, anchor=CENTER)
         self.units = self.create_units()
         self.current_focus = None
+
+        button = Button(self.frame, text="Enter", command=self.check_answer)
+        button.pack()
     
     def update_focus(self, event):
         print("focus updated")
         self.current_focus = event.widget
 
-    def character_checks(self, event):
+    def check_character(self, event):
         char = event.char.lower()
+        print(event.keycode)
         print("character checks")
 
         print(len(event.widget.get()))
@@ -37,21 +43,30 @@ class Cryptogram:
         if char in legal_chars:
             print("go to next")
             self.set_next_focus()
+        elif event.keycode == 8: #check if backspace was pressed
+            print("go back")
+            self.set_prev_focus()
+            self.current_focus.delete(0, END)
 
     
     def create_units(self):
         units = []
-        for ch in self.text:
-            unit = Unit(self.window, ch)
-            units.append(unit)
+        for ch in self.ciphertext:
 
-            #unit.entry.bind("<FocusIn>", lambda *args: self.update_focus(unit))
-            unit.entry.bind("<FocusIn>", self.update_focus)
+            if ch in legal_chars:
 
-            unit.entry.bind("<Key>", self.character_checks)
+                unit = Unit(self.frame, ch)
+                units.append(unit)
 
-            #name = unit.entry_text.trace_add("write", lambda *args: test_entry(unit.entry_text))#self.character_checks)#self.character_checks(unit.entry_text, unit.entry))
-            #print("observer:", name)
+                #unit.entry.bind("<FocusIn>", lambda *args: self.update_focus(unit))
+                unit.entry.bind("<FocusIn>", self.update_focus)
+
+                unit.entry.bind("<Key>", self.check_character)
+
+                #name = unit.entry_text.trace_add("write", lambda *args: test_entry(unit.entry_text))#self.character_checks)#self.character_checks(unit.entry_text, unit.entry))
+                #print("observer:", name)
+            else:
+                unit = Unit(self.frame, ch)
 
         return units
             
@@ -67,7 +82,26 @@ class Cryptogram:
             next_focus.focus_set() #physically set the focus
 
         #set the current focus to be the next entry in the list. however, if it's the last entry than keep the same focus
-        self.current_focus = self.units[index + 1].entry if index + 1 < len(self.units) else self.current_focus
+
+    def set_prev_focus(self):
+
+        index = find_entry_index(self.units, self.current_focus)
+
+        if index - 1 >= 0:
+            prev_focus = self.units[index - 1].entry
+            self.current_focus = prev_focus
+            prev_focus.focus_set()
+    
+    def check_answer(self):
+        user_answer = ""
+
+        for unit in self.units:
+            entry = unit.entry
+            user_answer += entry.get().lower()
+        
+
+        print(user_answer)
+    
 
     
-    #TODO: maybe create a 'unit' class which has both entry and the text letter above/below it. each unit is in its own canvas
+    #TODO: make the cryptogram class have its own frame
