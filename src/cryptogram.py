@@ -1,56 +1,73 @@
 from tkinter import *
+from unit import Unit
 
-def focused(event):
-    print("FOCUS!")
+
+legal_chars = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+                "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
+
+
+def find_entry_index(units, entry):
+    for i, unit in enumerate(units):
+        if(unit.entry == entry):
+            return i
+    return -1
+
+def test_entry(entry_text):
+    #print(type(var))
+    print(entry_text)
 
 class Cryptogram:
     
     def __init__(self, window, text):
         self.text = text
         self.window = window
-        self.entries = self.create_entries()
+        self.units = self.create_units()
         self.current_focus = None
     
-    def update_focus(self, entry):
+    def update_focus(self, event):
         print("focus updated")
-        self.current_focus = entry
+        self.current_focus = event.widget
 
-    def character_checks(self, entry_text):
-        print(self)
-        print(entry_text)
-        print(len(entry_text.get()))
+    def character_checks(self, event):
+        char = event.char.lower()
         print("character checks")
-        if len(entry_text.get()) > 0:
-            entry_text.set(entry_text.get()[-1])
-        
-        if entry_text.get() != " " and len(entry_text.get()) > 0:
+
+        print(len(event.widget.get()))
+
+        if char in legal_chars:
+            print("go to next")
             self.set_next_focus()
 
-    def create_entries(self):
-        entries = []
+    
+    def create_units(self):
+        units = []
         for ch in self.text:
-            entry_text = StringVar()
-            entry = Entry(self.window, width = 3 ,textvariable= entry_text)
-            entry.pack(side=LEFT, padx=5, pady=5)
-            entries.append(entry)
+            unit = Unit(self.window, ch)
+            units.append(unit)
 
-            #bind update focus function to whenever the focus enters this entry
-            entry.bind("<FocusIn>", lambda *args: self.update_focus(entry))
+            #unit.entry.bind("<FocusIn>", lambda *args: self.update_focus(unit))
+            unit.entry.bind("<FocusIn>", self.update_focus)
 
-            entry.bind("<Key>", lambda *args: self.character_checks(entry_text))
+            unit.entry.bind("<Key>", self.character_checks)
 
-            #wheenver entry text var changes, perform char checks on it
-            entry_text.trace_add("write", lambda *args: self.character_checks(entry_text))
+            #name = unit.entry_text.trace_add("write", lambda *args: test_entry(unit.entry_text))#self.character_checks)#self.character_checks(unit.entry_text, unit.entry))
+            #print("observer:", name)
 
-        return entries
+        return units
+            
 
     def set_next_focus(self):
         print("setting next focus")
         #find the index of the current focus entry
-        index = self.entries.index(self.current_focus)
+        index = find_entry_index(self.units, self.current_focus)
+
+        if index + 1 < len(self.units): #if there is a next entry in the list (not the last one)
+            next_focus = self.units[index + 1].entry
+            self.current_focus = next_focus
+            next_focus.focus_set() #physically set the focus
 
         #set the current focus to be the next entry in the list. however, if it's the last entry than keep the same focus
-        self.current_focus = self.entries[index + 1] if index + 1 < len(self.entries) else self.current_focus
+        self.current_focus = self.units[index + 1].entry if index + 1 < len(self.units) else self.current_focus
 
     
     #TODO: maybe create a 'unit' class which has both entry and the text letter above/below it. each unit is in its own canvas
