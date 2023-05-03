@@ -1,6 +1,35 @@
 
 from tkinter import *
 from cryptogram import Cryptogram
+from random import shuffle
+
+legal_chars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+                "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+
+
+def encrypt(plaintext):
+
+    plaintext = plaintext.lower()
+    
+    random_chars = legal_chars.copy()
+    shuffle(random_chars)
+
+    
+
+    key = {plain: cipher for plain, cipher in zip(legal_chars, random_chars)}
+
+    ciphertext = ""
+
+    for ch in plaintext:
+        if ch in key:
+            ciphertext += key[ch]
+        else:
+            ciphertext += ch
+    
+    return ciphertext
+
+
+
 
 root = Tk()
 
@@ -22,8 +51,15 @@ center_y = int(screen_height / 2 - window_height / 2)
 # set the position of the window to the center of the screen
 root.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
 
-plaintext = "hello there"
-ciphertext = "abccd eabgb"
+
+with open("quotes.txt", "r") as quotes_file:
+    global plaintext
+    plaintext = quotes_file.readline().strip()
+
+ciphertext = encrypt(plaintext)
+
+print(ciphertext)
+print(plaintext)
 
 cryptogram = Cryptogram(root, ciphertext, plaintext)
 
