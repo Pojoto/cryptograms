@@ -100,7 +100,7 @@ class Cryptogram:
             entry = unit.entry
             user_answer += entry.get().lower()
         
-        
+        #if 
 
         print(user_answer)
     
