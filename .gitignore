@@ -1,5 +1,5 @@
-#test/example script
-test.py
+#test/example scripts (most are tkinter stuff)
+test*.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
