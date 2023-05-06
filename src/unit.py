@@ -9,16 +9,8 @@ class Unit:
         
         self.frame = Frame(frame, width=30, height=0)#, background="black")
 
-        # if randint(0, 10) < 5:
-        #     self.frame.pack(side=LEFT)
-        # else:
-        #     self.frame.pack()
-
-
-        #self.frame.grid(row = index // 15, column = index % 15, padx=2)#, expand=True)
-
-        self.label = Label(self.frame, text=char)
-        self.label.pack()
+        self.label = Label(self.frame, text=char, font=("Times New Roman", 20))
+        self.label.pack(side=BOTTOM)
 
 
 
@@ -30,7 +22,7 @@ class EntryUnit(Unit):
 
         self.entry_text = StringVar()
 
-        self.entry = Entry(self.frame, width=2, textvariable=self.entry_text)
+        self.entry = Entry(self.frame, width=2, textvariable=self.entry_text, font=("Times New Roman", 20))
         self.entry.pack(padx=5,pady=5)
 
         self.entry_text.trace_add("write", lambda *args: self.character_limit(self.entry_text))
