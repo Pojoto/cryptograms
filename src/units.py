@@ -36,23 +36,26 @@ class Units:
                 unit.frame.grid(row = i // 15, column = i % 15, padx=2)
         return entry_units
     
-
+    #function handling which characters are pressed, how to react
     def check_character(self, event):
-        char = event.char.lower()
+        char = event.char.upper()
         print(event.keycode)
         print("character checks")
 
         print(len(event.widget.get()))
 
         if char in alpha_set:
-            print("go to next")
             self.set_next_focus()
         elif event.keycode == 8: #check if backspace was pressed
-            print("go back")
             self.set_prev_focus()
             self.current_focus.delete(0, END)
         elif event.keycode == 32: #check if space was pressed - move to next entry
-            self.set_next_focus() 
+            self.set_next_focus()
+        elif event.keycode == 37: #check if left arrow was pressed - go to prev entry
+            self.set_prev_focus()
+        elif event.keycode == 39: # check if right arrow was pressed - go to next entry
+            self.set_next_focus()
+         
 
     def update_focus(self, event):
         print("focus updated")
