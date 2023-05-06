@@ -2,24 +2,19 @@
 from tkinter import *
 from cryptogram import Cryptogram
 from random import shuffle
-
-legal_chars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-                "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+from alphabet import alpha_list
 
 
 def encrypt(plaintext):
 
     plaintext = plaintext.lower()
     
-    random_chars = legal_chars.copy()
+    random_chars = alpha_list.copy()
     shuffle(random_chars)
 
-    
-
-    key = {plain: cipher for plain, cipher in zip(legal_chars, random_chars)}
+    key = {plain: cipher for plain, cipher in zip(alpha_list, random_chars)}
 
     ciphertext = ""
-
     for ch in plaintext:
         if ch in key:
             ciphertext += key[ch]
@@ -27,8 +22,6 @@ def encrypt(plaintext):
             ciphertext += ch
     
     return ciphertext
-
-
 
 
 root = Tk()
@@ -62,6 +55,7 @@ print(ciphertext)
 print(plaintext)
 
 cryptogram = Cryptogram(root, ciphertext, plaintext)
+cryptogram.main_frame.pack(expand=True, anchor=CENTER)
 
 
 # entry_text = StringVar()
