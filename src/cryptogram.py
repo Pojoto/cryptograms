@@ -1,5 +1,6 @@
 from tkinter import *
 from unit import *
+import string
 
 
 legal_chars = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
@@ -100,9 +101,13 @@ class Cryptogram:
             entry = unit.entry
             user_answer += entry.get().lower()
         
-        #if 
+        #all characters not to be read from the plaintext - so punctuation and space
+        char_filter = string.punctuation + ' ' 
+        
+        plaintext_no_punc = self.plaintext.translate(str.maketrans('', '', char_filter))
 
-        print(user_answer)
+        if user_answer == plaintext_no_punc.lower():
+            print("CORRECT!")
     
 
     
