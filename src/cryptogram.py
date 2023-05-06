@@ -22,8 +22,8 @@ class Cryptogram:
     def __init__(self, window, ciphertext, plaintext):
         self.ciphertext = ciphertext
         self.plaintext = plaintext
-        self.frame = Frame(window)
-        self.frame.pack(expand=True, fill=X, anchor=CENTER)
+        self.frame = Frame(window, width=600, height=400, bg="black")
+        self.frame.pack(expand=True, anchor=CENTER)
         self.entry_units = self.create_units()
         self.current_focus = None
 
@@ -49,6 +49,8 @@ class Cryptogram:
             print("go back")
             self.set_prev_focus()
             self.current_focus.delete(0, END)
+        elif event.keycode == 32: #check if space was pressed - move to next entry
+            self.set_next_focus() 
 
     
     def create_units(self):
