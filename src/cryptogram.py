@@ -22,14 +22,14 @@ class Cryptogram:
 
         for unit in self.units.entry_units:
             entry = unit.entry
-            user_answer += entry.get().lower()
+            user_answer += entry.get().upper()
         
         #all characters not to be read from the plaintext - so punctuation and space
         char_filter = string.punctuation + ' ' 
         
         plaintext_no_punc = self.plaintext.translate(str.maketrans('', '', char_filter))
 
-        if user_answer == plaintext_no_punc.lower():
+        if user_answer == plaintext_no_punc.upper():
             print("CORRECT!")
     
 

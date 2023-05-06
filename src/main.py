@@ -7,7 +7,7 @@ from alphabet import alpha_list
 
 def encrypt(plaintext):
 
-    plaintext = plaintext.lower()
+    plaintext = plaintext.upper()
     
     random_chars = alpha_list.copy()
     shuffle(random_chars)
