@@ -17,30 +17,43 @@ class Cryptogram:
         self.entry_units = self.make_units(text)
         self.current_focus = None
 
-    
     def make_units(self, text):
         entry_units = []
         max_row = 15
-        for i, ch in enumerate(text):
+        row_index = 0
+        col_index = 0
 
-            if ch in alpha_set:
+        for chunk in text.split():
 
-                entry_unit = EntryUnit(self.frame, ch)
-                entry_units.append(entry_unit)
-                entry_unit.frame.grid(row = i // max_row, column = i % max_row, padx=2, sticky=N)
+            if col_index + len(chunk) > 15:
+                col_index = 0
+                row_index += 1
+
+            for ch in chunk:
+
+                if ch in alpha_set:
+                    entry_unit = EntryUnit(self.frame, ch)
+                    entry_units.append(entry_unit)
+                    entry_unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+                    
+                    entry_unit.entry.bind("<FocusIn>", self.click_focus)
+                    entry_unit.entry.bind("<Key>", self.check_character)
+                else:
+                    unit = Unit(self.frame, ch)
+                    unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
                 
-                entry_unit.entry.bind("<FocusIn>", self.click_focus)
-                entry_unit.entry.bind("<Key>", self.check_character)
+                col_index += 1
 
-            else:
-                unit = Unit(self.frame, ch)
-                unit.frame.grid(row = i // max_row, column = i % max_row, padx=2, sticky=N)
+            space = Unit(self.frame, ' ')
+            space.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+            col_index += 1
+                
         return entry_units
     
     #function handling which characters are pressed, how to react
     def check_character(self, event):
         char = event.char.upper()
-        print(event.keycode)
+        #print(event.keycode)
 
         if char in alpha_set:
             self.set_next_focus()
