@@ -33,3 +33,4 @@ class EntryUnit(Unit):
     def character_limit(self, entry_text):
         if len(entry_text.get()) > 0:
             entry_text.set(entry_text.get()[-1])
+        entry_text.set(entry_text.get().upper())
