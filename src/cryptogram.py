@@ -54,6 +54,11 @@ class Cryptogram:
         elif event.keycode == 39: # check if right arrow was pressed - go to next entry
             self.set_next_focus()
          
+        
+    def clear_answer(self):
+        for unit in self.entry_units:
+            entry = unit.entry
+            entry.delete(0, END)
 
     def get_answer(self):
         user_answer = ""

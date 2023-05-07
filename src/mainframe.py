@@ -23,6 +23,7 @@ def encrypt(plaintext):
     
     return ciphertext
 
+
 class MainFrame:
     
     def __init__(self, window, quotes):
@@ -32,25 +33,23 @@ class MainFrame:
 
         self.frame = Frame()#window, width=600, height=400)
 
-        button = Button(self.frame, text="Enter", command=self.check_answer)
-        button.pack(side=BOTTOM)
+        enter_button = Button(self.frame, text="Enter", command=self.check_answer)
+        enter_button.pack(side=BOTTOM)
+
+        clear_button = Button(self.frame, text="Clear", command=self.clear)
+        clear_button.pack(side=BOTTOM)
 
         self.cryptogram = Cryptogram(self.frame, self.ciphertext)
         self.cryptogram.frame.pack()
-
 
     
     def new_quote(self):
         quote = choice(self.quotes)
         self.plaintext = quote
         self.ciphertext = encrypt(quote)
-    
-    def get_quote(self):
 
-        quote = choice(self.quotes)
-        
-        return quote
-
+    def clear(self):
+        self.cryptogram.clear_answer()
 
     def check_answer(self):
 
