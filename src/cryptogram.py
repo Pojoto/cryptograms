@@ -1,37 +1,87 @@
 from tkinter import *
 from unit import *
-from units import Units
-import string
+from alphabet import alpha_set
+
+
+def find_entry_index(units, entry):
+    for i, unit in enumerate(units):
+        if(unit.entry == entry):
+            return i
+    return -1
 
 
 class Cryptogram:
+
+    def __init__(self, root, text):
+        self.frame = Frame(root)
+        self.entry_units = self.make_units(text)
+        self.current_focus = None
+
     
-    def __init__(self, window, ciphertext, plaintext):
-        self.ciphertext = ciphertext
-        self.plaintext = plaintext
-        self.frame = Frame()#window, width=600, height=400)
+    def make_units(self, text):
+        entry_units = []
+        max_row = 15
+        for i, ch in enumerate(text):
 
-        self.units = Units(self.frame, ciphertext)
-        self.units.frame.pack()
+            if ch in alpha_set:
 
-        button = Button(self.frame, text="Enter", command=self.check_answer)
-        button.pack()
+                entry_unit = EntryUnit(self.frame, ch)
+                entry_units.append(entry_unit)
+                entry_unit.frame.grid(row = i // max_row, column = i % max_row, padx=2, sticky=N)
+                
+                entry_unit.entry.bind("<FocusIn>", self.update_focus)
+                entry_unit.entry.bind("<Key>", self.check_character)
 
-    def check_answer(self):
+            else:
+                unit = Unit(self.frame, ch)
+                unit.frame.grid(row = i // max_row, column = i % max_row, padx=2, sticky=N)
+        return entry_units
+    
+    #function handling which characters are pressed, how to react
+    def check_character(self, event):
+        char = event.char.upper()
+        print(event.keycode)
+
+        if char in alpha_set:
+            self.set_next_focus()
+        elif event.keycode == 8: #check if backspace was pressed
+            self.set_prev_focus()
+            self.current_focus.delete(0, END)
+        elif event.keycode == 32: #check if space was pressed - move to next entry
+            self.set_next_focus()
+        elif event.keycode == 37: #check if left arrow was pressed - go to prev entry
+            self.set_prev_focus()
+        elif event.keycode == 39: # check if right arrow was pressed - go to next entry
+            self.set_next_focus()
+         
+
+    def get_answer(self):
         user_answer = ""
-
-        for unit in self.units.entry_units:
+        for unit in self.entry_units:
             entry = unit.entry
             user_answer += entry.get().upper()
-        
-        #all characters not to be read from the plaintext - so punctuation and space
-        char_filter = string.punctuation + ' ' 
-        
-        plaintext_no_punc = self.plaintext.translate(str.maketrans('', '', char_filter))
+        return user_answer
 
-        if user_answer == plaintext_no_punc.upper():
-            print("CORRECT!")
-    
+    def update_focus(self, event):
+        self.current_focus = event.widget
+        
+    #set the current focus to be the next entry in the list. however, if it's the last entry than keep the same focus
+    def set_next_focus(self):
+        #find the index of the current focus entry
+        index = find_entry_index(self.entry_units, self.current_focus)
 
+        if index + 1 < len(self.entry_units): #if there is a next entry in the list (not the last one)
+            next_focus = self.entry_units[index + 1].entry
+            self.current_focus = next_focus
+            next_focus.focus_set() #physically set the focus
+
+    def set_prev_focus(self):
+        index = find_entry_index(self.entry_units, self.current_focus)
+        
+        if index - 1 >= 0:
+            prev_focus = self.entry_units[index - 1].entry
+            self.current_focus = prev_focus
+            prev_focus.focus_set()
     
-    #TODO: make the cryptogram class have its own frame
+    def self_destruct(self):
+        self.frame.destroy()
