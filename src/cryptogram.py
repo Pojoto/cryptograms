@@ -9,12 +9,12 @@ class Cryptogram:
     def __init__(self, window, ciphertext, plaintext):
         self.ciphertext = ciphertext
         self.plaintext = plaintext
-        self.main_frame = Frame(window, width=600, height=400)
+        self.frame = Frame()#window, width=600, height=400)
 
-        self.units = Units(self.main_frame, ciphertext)
+        self.units = Units(self.frame, ciphertext)
         self.units.frame.pack()
 
-        button = Button(self.main_frame, text="Enter", command=self.check_answer)
+        button = Button(self.frame, text="Enter", command=self.check_answer)
         button.pack()
 
     def check_answer(self):

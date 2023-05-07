@@ -20,6 +20,8 @@ class EntryUnit(Unit):
 
         super().__init__(frame, char)
 
+        #self.label.pack()
+
         self.entry_text = StringVar()
 
         self.entry = Entry(self.frame, width=2, textvariable=self.entry_text, font=("Times New Roman", 20))

@@ -20,20 +20,21 @@ class Units:
     
     def make_units(self, text):
         entry_units = []
+        max_row = 20
         for i, ch in enumerate(text):
 
             if ch in alpha_set:
 
                 entry_unit = EntryUnit(self.frame, ch)
                 entry_units.append(entry_unit)
-                entry_unit.frame.grid(row = i // 15, column = i % 15, padx=2)
+                entry_unit.frame.grid(row = i // max_row, column = i % max_row, padx=2, sticky=N)
                 
                 entry_unit.entry.bind("<FocusIn>", self.update_focus)
                 entry_unit.entry.bind("<Key>", self.check_character)
 
             else:
                 unit = Unit(self.frame, ch)
-                unit.frame.grid(row = i // 15, column = i % 15, padx=2)
+                unit.frame.grid(row = i // max_row, column = i % max_row, padx=2, sticky=N)
         return entry_units
     
     #function handling which characters are pressed, how to react

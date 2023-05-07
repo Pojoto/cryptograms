@@ -55,7 +55,7 @@ print(ciphertext)
 print(plaintext)
 
 cryptogram = Cryptogram(root, ciphertext, plaintext)
-cryptogram.main_frame.pack(expand=True, anchor=CENTER)
+cryptogram.frame.pack(expand=True, anchor=CENTER)
 
 
 # entry_text = StringVar()
