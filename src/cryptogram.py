@@ -29,7 +29,7 @@ class Cryptogram:
                 entry_units.append(entry_unit)
                 entry_unit.frame.grid(row = i // max_row, column = i % max_row, padx=2, sticky=N)
                 
-                entry_unit.entry.bind("<FocusIn>", self.update_focus)
+                entry_unit.entry.bind("<FocusIn>", self.click_focus)
                 entry_unit.entry.bind("<Key>", self.check_character)
 
             else:
@@ -66,9 +66,15 @@ class Cryptogram:
             entry = unit.entry
             user_answer += entry.get().upper()
         return user_answer
+    
+    def update_focus(self, entry_to_focus):
+        if self.current_focus is not None:
+            self.current_focus.config(bg="white")
+        self.current_focus = entry_to_focus
+        entry_to_focus.config(bg="orange")
 
-    def update_focus(self, event):
-        self.current_focus = event.widget
+    def click_focus(self, event):
+        self.update_focus(event.widget)
         
     #set the current focus to be the next entry in the list. however, if it's the last entry than keep the same focus
     def set_next_focus(self):
@@ -77,7 +83,7 @@ class Cryptogram:
 
         if index + 1 < len(self.entry_units): #if there is a next entry in the list (not the last one)
             next_focus = self.entry_units[index + 1].entry
-            self.current_focus = next_focus
+            self.update_focus(next_focus)
             next_focus.focus_set() #physically set the focus
 
     def set_prev_focus(self):
@@ -85,7 +91,7 @@ class Cryptogram:
         
         if index - 1 >= 0:
             prev_focus = self.entry_units[index - 1].entry
-            self.current_focus = prev_focus
+            self.update_focus(prev_focus)
             prev_focus.focus_set()
     
     def self_destruct(self):
