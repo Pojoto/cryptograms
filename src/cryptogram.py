@@ -17,6 +17,7 @@ class Cryptogram:
         self.frame = Frame(root)
         self.entry_units = self.make_chunks(text)
         self.current_focus = None
+        self.appearances = self.make_appearances()
 
     def make_chunks(self, text):
         entry_units = []
@@ -42,27 +43,49 @@ class Cryptogram:
 
             col_index += (length + 1)
                 
-        return entry_units         
+        return entry_units        
+
+    def copy_entry(self, label_char, user_char):
+        for entry_unit in self.appearances[label_char]:
+            entry_unit.entry.delete(0, END)
+            entry_unit.entry.insert(0, user_char)
         
+
+    def make_appearances(self):
+        appearances = {}
+        for entry_unit in self.entry_units:
+            letter = entry_unit.char
+            if letter in alpha_set:
+                if letter in appearances:
+                    appearances[letter].add(entry_unit)
+                else:
+                    appearances[letter] = {entry_unit}
+        
+        return appearances
+                
+
     def clear_answer(self):
-        for unit in self.entry_units:
-            entry = unit.entry
+        for entry_unit in self.entry_units:
+            entry = entry_unit.entry
             entry.delete(0, END)
 
     def get_answer(self):
         user_answer = ""
-        for unit in self.entry_units:
-            entry = unit.entry
+        for entry_unit in self.entry_units:
+            entry = entry_unit.entry
             user_answer += entry.get().upper()
         return user_answer
     
     def update_focus(self, entry_to_focus):
         if self.current_focus is not None:
-            self.current_focus.config(bg="white")
+            letter = self.current_focus.char
+            self.current_focus.config(readonlybackground=self.frame["bg"])
         self.current_focus = entry_to_focus
-        entry_to_focus.config(bg="orange")
+        print("orange")
+        entry_to_focus.config(readonlybackground="orange")
 
     def click_focus(self, event):
+        print("focus")
         self.update_focus(event.widget)
         
     #set the current focus to be the next entry in the list. however, if it's the last entry than keep the same focus
