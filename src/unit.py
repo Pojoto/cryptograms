@@ -22,32 +22,32 @@ class EntryUnit(Unit):
 
         super().__init__(cryptogram, frame, char)
 
-        self.entry = Entry(self.frame, width=2, textvariable=self.entry_text, font=("Times New Roman", 20), state='readonly', cursor="arrow")
+        self.entry = Entry(self.frame, width=2, font=("Times New Roman", 20), state='readonly', cursor="arrow")
         self.entry.pack(padx=5,pady=5)
 
-        self.entry.bind("<FocusIn>", self.cryptogram.click_focus)
+        #pass the current entry unit object(self) to the click focus function in cryptogram manager 
+        self.entry.bind("<FocusIn>", lambda event: self.cryptogram.click_focus(self))
         self.entry.bind("<Key>", self.check_character)
 
     
     #function handling which characters are pressed, how to react
     def check_character(self, event):
         char = event.char.upper()
+        
         #print(event.keycode)
 
-        if len(self.entry.get()) > 0:
-            self.entry.delete(0, END)
-        
-        print("insert")
-        self.entry.insert(0, char)
+        if char in alpha_set or char == " ": #space should also replace chars, and move to next entry (treat as normal letter in this case)
 
-        if char in alpha_set:
+            #copy the user char (char) into all the entries that share the same char as self.char (label char)
+            self.cryptogram.copy_entry(self.char, char)
             self.cryptogram.set_next_focus()
+            
         elif event.keycode == 8: #check if backspace was pressed
+            self.cryptogram.copy_entry(self.char, " ") #remove all characters of the shared entries (replace them with space)
             self.cryptogram.set_prev_focus()
-            self.cryptogram.current_focus.delete(0, END)
-        elif event.keycode == 32: #check if space was pressed - move to next entry
-            self.cryptogram.set_next_focus()
         elif event.keycode == 37: #check if left arrow was pressed - go to prev entry
             self.cryptogram.set_prev_focus()
         elif event.keycode == 39: # check if right arrow was pressed - go to next entry
             self.cryptogram.set_next_focus()
+
+
