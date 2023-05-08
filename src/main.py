@@ -11,8 +11,8 @@ root.title("Cryptograms")
 
 root.configure(background='lightblue')
 
-window_width = 900
-window_height = 600
+window_width = 1200
+window_height = 800
 
 # get the screen dimension
 screen_width = root.winfo_screenwidth()
