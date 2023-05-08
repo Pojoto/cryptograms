@@ -1,6 +1,7 @@
 from tkinter import *
 from unit import *
 from alphabet import alpha_set
+from chunk import Chunk
 
 
 def find_entry_index(units, entry):
@@ -14,59 +15,51 @@ class Cryptogram:
 
     def __init__(self, root, text):
         self.frame = Frame(root)
-        self.entry_units = self.make_units(text)
+        self.entry_units = self.make_chunks(text)
         self.current_focus = None
 
-    def make_units(self, text):
+    def make_chunks(self, text):
         entry_units = []
         max_row = 15
         row_index = 0
         col_index = 0
 
-        for chunk in text.split():
+        for text_chunk in text.split():
 
-            if col_index + len(chunk) > 15:
+            length = len(text_chunk)
+
+            if col_index + length > 15:
                 col_index = 0
                 row_index += 1
+            elif length > 15:
+                print("WORD IS TOO LONG")
 
-            for ch in chunk:
+            chunk = Chunk(self.frame, text_chunk, self)
 
-                if ch in alpha_set:
-                    entry_unit = EntryUnit(self.frame, ch)
-                    entry_units.append(entry_unit)
-                    entry_unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+            chunk.frame.grid(row = row_index, column = col_index, padx=2, sticky=N, columnspan=length)
+
+            entry_units.extend(chunk.entry_units)
+
+            # for ch in chunk:
+
+            #     if ch in alpha_set:
+            #         entry_unit = EntryUnit(self.frame, ch)
+            #         entry_units.append(entry_unit)
+            #         entry_unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
                     
-                    entry_unit.entry.bind("<FocusIn>", self.click_focus)
-                    entry_unit.entry.bind("<Key>", self.check_character)
-                else:
-                    unit = Unit(self.frame, ch)
-                    unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+            #         entry_unit.entry.bind("<FocusIn>", self.click_focus)
+            #         entry_unit.entry.bind("<Key>", self.check_character)
+            #     else:
+            #         unit = Unit(self.frame, ch)
+            #         unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
                 
-                col_index += 1
+            #     col_index += 1
 
-            space = Unit(self.frame, ' ')
-            space.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
-            col_index += 1
+            # space = Unit(self.frame, ' ')
+            # space.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+            col_index += (length + 1)
                 
-        return entry_units
-    
-    #function handling which characters are pressed, how to react
-    def check_character(self, event):
-        char = event.char.upper()
-        #print(event.keycode)
-
-        if char in alpha_set:
-            self.set_next_focus()
-        elif event.keycode == 8: #check if backspace was pressed
-            self.set_prev_focus()
-            self.current_focus.delete(0, END)
-        elif event.keycode == 32: #check if space was pressed - move to next entry
-            self.set_next_focus()
-        elif event.keycode == 37: #check if left arrow was pressed - go to prev entry
-            self.set_prev_focus()
-        elif event.keycode == 39: # check if right arrow was pressed - go to next entry
-            self.set_next_focus()
-         
+        return entry_units         
         
     def clear_answer(self):
         for unit in self.entry_units:
