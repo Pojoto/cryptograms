@@ -11,8 +11,8 @@ class Unit:
 
         self.frame = Frame(frame, width=30, height=0)#, background="black")
 
-        self.label = Label(self.frame, text=char, font=("Times New Roman", 20))
-        self.label.pack(side=BOTTOM)
+        self.text = Label(self.frame, text=char, font=("Times New Roman", 20))
+        self.text.pack(side=BOTTOM)
 
 
 
@@ -26,18 +26,24 @@ class EntryUnit(Unit):
 
         self.entry_text = StringVar()
 
-        self.entry = Entry(self.frame, width=2, textvariable=self.entry_text, font=("Times New Roman", 20))
+        self.entry = Entry(self.frame, width=2, textvariable=self.entry_text, font=("Times New Roman", 20), state='readonly', cursor="arrow")
         self.entry.pack(padx=5,pady=5)
 
         self.entry.bind("<FocusIn>", self.cryptogram.click_focus)
         self.entry.bind("<Key>", self.check_character)
 
-        self.entry_text.trace_add("write", lambda *args: self.character_limit(self.entry_text))
+        #self.entry_text.trace_add("write", lambda *args: self.character_limit(self.entry_text))
     
     #function handling which characters are pressed, how to react
     def check_character(self, event):
         char = event.char.upper()
         #print(event.keycode)
+
+        if len(self.entry.get()) > 0:
+            self.entry.delete(0, END)
+        
+        print("insert")
+        self.entry.insert(0, char)
 
         if char in alpha_set:
             self.cryptogram.set_next_focus()
@@ -56,3 +62,4 @@ class EntryUnit(Unit):
         if len(entry_text.get()) > 0:
             entry_text.set(entry_text.get()[-1])
         entry_text.set(entry_text.get().upper())
+        self.cryptogram.copy_entry(self.char, entry_text.get())
