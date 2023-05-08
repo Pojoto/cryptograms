@@ -50,7 +50,7 @@ class Cryptogram:
             entry_unit.entry.delete(0, END)
             entry_unit.entry.insert(0, user_char)
         
-
+    #each key in the dict is a letter, the values are a list of all the entry units of that letter in the cryptogram
     def make_appearances(self):
         appearances = {}
         for entry_unit in self.entry_units:
