@@ -16,14 +16,11 @@ class Chunk:
         for i, ch in enumerate(self.text_chunk):
 
             if ch in alpha_set:
-                entry_unit = EntryUnit(self.frame, ch)
+                entry_unit = EntryUnit(self.cryptogram, self.frame, ch)
                 entry_units.append(entry_unit)
                 entry_unit.frame.grid(row = 0, column = i, padx=2, sticky=N)
-                
-                entry_unit.entry.bind("<FocusIn>", self.cryptogram.click_focus)
-                entry_unit.entry.bind("<Key>", self.cryptogram.check_character)
             else:
-                unit = Unit(self.frame, ch)
+                unit = Unit(self.cryptogram, self.frame, ch)
                 unit.frame.grid(row = 0, column = i, padx=2, sticky=N)
 
         return entry_units

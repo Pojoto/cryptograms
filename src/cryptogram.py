@@ -40,23 +40,6 @@ class Cryptogram:
 
             entry_units.extend(chunk.entry_units)
 
-            # for ch in chunk:
-
-            #     if ch in alpha_set:
-            #         entry_unit = EntryUnit(self.frame, ch)
-            #         entry_units.append(entry_unit)
-            #         entry_unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
-                    
-            #         entry_unit.entry.bind("<FocusIn>", self.click_focus)
-            #         entry_unit.entry.bind("<Key>", self.check_character)
-            #     else:
-            #         unit = Unit(self.frame, ch)
-            #         unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
-                
-            #     col_index += 1
-
-            # space = Unit(self.frame, ' ')
-            # space.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
             col_index += (length + 1)
                 
         return entry_units         
