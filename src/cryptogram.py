@@ -16,7 +16,11 @@ class Cryptogram:
     def __init__(self, root, text):
         self.frame = Frame(root)
         self.entry_units = self.make_chunks(text)
+
+        #current focus is an entry unit object
         self.current_focus = None
+
+        #appearances is a dictionary with keys of letters, values of lists of entry units sharing that letter
         self.appearances = self.make_appearances()
 
     def make_chunks(self, text):
@@ -47,8 +51,10 @@ class Cryptogram:
 
     def copy_entry(self, label_char, user_char):
         for entry_unit in self.appearances[label_char]:
+            entry_unit.entry.config(state="normal")
             entry_unit.entry.delete(0, END)
             entry_unit.entry.insert(0, user_char)
+            entry_unit.entry.config(state="readonly")
         
     #each key in the dict is a letter, the values are a list of all the entry units of that letter in the cryptogram
     def make_appearances(self):
@@ -76,35 +82,41 @@ class Cryptogram:
             user_answer += entry.get().upper()
         return user_answer
     
-    def update_focus(self, entry_to_focus):
+    def update_focus(self, unit_to_focus):
         if self.current_focus is not None:
-            letter = self.current_focus.char
-            self.current_focus.config(readonlybackground=self.frame["bg"])
-        self.current_focus = entry_to_focus
+            oldletter = self.current_focus.char
+            for entry_unit in self.appearances[oldletter]:
+                entry_unit.entry.config(readonlybackground=self.frame["bg"])
+        self.current_focus = unit_to_focus
+        newletter = unit_to_focus.char
         print("orange")
-        entry_to_focus.config(readonlybackground="orange")
+        for entry_unit in self.appearances[newletter]:
+            entry_unit.entry.config(readonlybackground="orange")
 
-    def click_focus(self, event):
+    def click_focus(self, entry_unit):
+        print(entry_unit.char)
         print("focus")
-        self.update_focus(event.widget)
+        self.update_focus(entry_unit)
         
     #set the current focus to be the next entry in the list. however, if it's the last entry than keep the same focus
     def set_next_focus(self):
         #find the index of the current focus entry
-        index = find_entry_index(self.entry_units, self.current_focus)
+        #index = find_entry_index(self.entry_units, self.current_focus)
+        index = self.entry_units.index(self.current_focus)
 
         if index + 1 < len(self.entry_units): #if there is a next entry in the list (not the last one)
-            next_focus = self.entry_units[index + 1].entry
+            next_focus = self.entry_units[index + 1]
             self.update_focus(next_focus)
-            next_focus.focus_set() #physically set the focus
+            next_focus.entry.focus_set() #physically set the focus
 
     def set_prev_focus(self):
-        index = find_entry_index(self.entry_units, self.current_focus)
+        #index = find_entry_index(self.entry_units, self.current_focus)
+        index = self.entry_units.index(self.current_focus)
         
         if index - 1 >= 0:
-            prev_focus = self.entry_units[index - 1].entry
+            prev_focus = self.entry_units[index - 1]
             self.update_focus(prev_focus)
-            prev_focus.focus_set()
+            prev_focus.entry.focus_set()
     
     def self_destruct(self):
         self.frame.destroy()
