@@ -4,13 +4,6 @@ from alphabet import alpha_set
 from chunk import Chunk
 
 
-def find_entry_index(units, entry):
-    for i, unit in enumerate(units):
-        if(unit.entry == entry):
-            return i
-    return -1
-
-
 class Cryptogram:
 
     def __init__(self, root, text):
@@ -33,10 +26,10 @@ class Cryptogram:
 
             length = len(text_chunk)
 
-            if col_index + length > 15:
+            if col_index + length > max_row:
                 col_index = 0
                 row_index += 1
-            elif length > 15:
+            elif length > max_row:
                 print("WORD IS TOO LONG")
 
             chunk = Chunk(self.frame, text_chunk, self)
@@ -73,7 +66,9 @@ class Cryptogram:
     def clear_answer(self):
         for entry_unit in self.entry_units:
             entry = entry_unit.entry
+            entry.config(state="normal")
             entry.delete(0, END)
+            entry.config(state="readonly")
 
     def get_answer(self):
         user_answer = ""
@@ -92,6 +87,7 @@ class Cryptogram:
         print("orange")
         for entry_unit in self.appearances[newletter]:
             entry_unit.entry.config(readonlybackground="orange")
+        unit_to_focus.entry.config(readonlybackground="red")
 
     def click_focus(self, entry_unit):
         print(entry_unit.char)
@@ -100,17 +96,27 @@ class Cryptogram:
         
     #set the current focus to be the next entry in the list. however, if it's the last entry than keep the same focus
     def set_next_focus(self):
-        #find the index of the current focus entry
-        #index = find_entry_index(self.entry_units, self.current_focus)
-        index = self.entry_units.index(self.current_focus)
 
-        if index + 1 < len(self.entry_units): #if there is a next entry in the list (not the last one)
-            next_focus = self.entry_units[index + 1]
-            self.update_focus(next_focus)
-            next_focus.entry.focus_set() #physically set the focus
+        start = self.current_focus
+
+        #find the index of the current focus entry
+        index = self.entry_units.index(self.current_focus)
+        index += 1
+
+        #get the next entry unit in the list, could wrap around to start
+        current = self.entry_units[index % len(self.entry_units)]
+        while current != start:
+
+            if len(current.entry.get()) == 0:
+                break
+
+            index = (index + 1) % len(self.entry_units)
+            current = self.entry_units[index]
+        
+        self.update_focus(current)
+        current.entry.focus_set()
 
     def set_prev_focus(self):
-        #index = find_entry_index(self.entry_units, self.current_focus)
         index = self.entry_units.index(self.current_focus)
         
         if index - 1 >= 0:
