@@ -22,17 +22,12 @@ class EntryUnit(Unit):
 
         super().__init__(cryptogram, frame, char)
 
-        #self.label.pack()
-
-        self.entry_text = StringVar()
-
         self.entry = Entry(self.frame, width=2, textvariable=self.entry_text, font=("Times New Roman", 20), state='readonly', cursor="arrow")
         self.entry.pack(padx=5,pady=5)
 
         self.entry.bind("<FocusIn>", self.cryptogram.click_focus)
         self.entry.bind("<Key>", self.check_character)
 
-        #self.entry_text.trace_add("write", lambda *args: self.character_limit(self.entry_text))
     
     #function handling which characters are pressed, how to react
     def check_character(self, event):
@@ -56,10 +51,3 @@ class EntryUnit(Unit):
             self.cryptogram.set_prev_focus()
         elif event.keycode == 39: # check if right arrow was pressed - go to next entry
             self.cryptogram.set_next_focus()
-
-
-    def character_limit(self, entry_text):
-        if len(entry_text.get()) > 0:
-            entry_text.set(entry_text.get()[-1])
-        entry_text.set(entry_text.get().upper())
-        self.cryptogram.copy_entry(self.char, entry_text.get())
