@@ -1,7 +1,7 @@
 from tkinter import *
 from unit import *
 from alphabet import alpha_set
-from chunk import Chunk
+from text_chunk import Chunk
 
 
 class Cryptogram:
@@ -27,6 +27,11 @@ class Cryptogram:
             length = len(text_chunk)
 
             if col_index + length > max_row:
+                while col_index <= 15:
+                    #TODO: try one chunk of a bunch of spaces next
+                    space_chunk = Chunk(self.frame, " ", self)
+                    space_chunk.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+                    col_index += 1
                 col_index = 0
                 row_index += 1
             elif length > max_row:
@@ -38,7 +43,15 @@ class Cryptogram:
 
             entry_units.extend(chunk.entry_units)
 
-            col_index += (length + 1)
+            col_index += length
+
+            if col_index < 15:
+                space_chunk = Chunk(self.frame, " ", self)
+                space_chunk.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+                # space_unit = Unit(self, self.frame, " ")
+                # space_unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+
+            col_index += 1
                 
         return entry_units        
 

@@ -3,10 +3,13 @@ from unit import Unit, EntryUnit
 
 from alphabet import alpha_set
 
+from random import choice
+colors = ["red", "blue", "green", "yellow", "orange", "pink", "brown", "gray", "purple"]
+
 class Chunk:
 
     def __init__(self, root, text_chunk, cryptogram):
-        self.frame = Frame(root)
+        self.frame = Frame(root, bg=choice(colors))
         self.text_chunk = text_chunk
         self.cryptogram = cryptogram
         self.entry_units = self.make_units()

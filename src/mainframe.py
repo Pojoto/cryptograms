@@ -31,7 +31,7 @@ class MainFrame:
 
         self.new_quote() #setup plaintext/ciphertext
 
-        self.frame = Frame()#window, width=600, height=400)
+        self.frame = Frame(window)#window, width=600, height=400)
 
         enter_button = Button(self.frame, text="Enter", command=self.check_answer)
         enter_button.pack(side=BOTTOM)
@@ -42,6 +42,8 @@ class MainFrame:
         self.cryptogram = Cryptogram(self.frame, self.ciphertext)
         self.cryptogram.frame.pack()
 
+        window.bind("<Return>", self.enter_pressed)#print("hi"))
+
     
     def new_quote(self):
         quote = choice(self.quotes)
@@ -50,6 +52,9 @@ class MainFrame:
 
     def clear(self):
         self.cryptogram.clear_answer()
+    
+    def enter_pressed(self, event):
+        self.check_answer()
 
     def check_answer(self):
 
@@ -66,6 +71,8 @@ class MainFrame:
             self.new_quote()
             self.cryptogram = Cryptogram(self.frame, self.ciphertext)
             self.cryptogram.frame.pack()
+        else:
+            print("WRONG!")
             
     
 
