@@ -8,7 +8,11 @@ class Cryptogram:
 
     def __init__(self, root, text):
         self.frame = Frame(root)
+       
+       
         self.entry_units = self.make_chunks(text)
+
+        #self.entry_units = self.make_units(text)
 
         #current focus is an entry unit object
         self.current_focus = None
@@ -22,12 +26,12 @@ class Cryptogram:
         row_index = 0
         col_index = 0
 
-        for text_chunk in text.split():
+        for i, text_chunk in enumerate(text.split()):
 
             length = len(text_chunk)
 
             if col_index + length > max_row:
-                while col_index <= 15:
+                while col_index <= max_row:
                     #TODO: try one chunk of a bunch of spaces next
                     space_chunk = Chunk(self.frame, " ", self)
                     space_chunk.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
@@ -45,15 +49,49 @@ class Cryptogram:
 
             col_index += length
 
-            if col_index < 15:
+            if i == len(text.split()) - 1:
+                while col_index <= max_row:
+                    #TODO: try one chunk of a bunch of spaces next
+                    space_chunk = Chunk(self.frame, " ", self)
+                    space_chunk.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+                    col_index += 1
+
+            if col_index < max_row:
                 space_chunk = Chunk(self.frame, " ", self)
                 space_chunk.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
                 # space_unit = Unit(self, self.frame, " ")
                 # space_unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+            
+
 
             col_index += 1
                 
-        return entry_units        
+        return entry_units  
+
+    def make_units(self, text):
+        entry_units = []
+        max_row = 15
+        row_index = 0
+        col_index = 0
+
+        for ch in text:
+
+            if col_index > max_row:
+                col_index = 0
+                row_index += 1
+            
+            if ch in alpha_set:
+                entry_unit = EntryUnit(self, self.frame, ch)
+                entry_unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+                entry_units.append(entry_unit)
+            else:
+                unit = Unit(self, self.frame, ch)
+                unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+            
+            col_index += 1
+        
+        return entry_units
+
 
     def copy_entry(self, label_char, user_char):
         for entry_unit in self.appearances[label_char]:

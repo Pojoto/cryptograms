@@ -2,6 +2,10 @@ from tkinter import *
 from random import randint
 from alphabet import alpha_set
 
+from random import choice
+colors = ["red", "blue", "green", "yellow", "orange", "pink", "brown", "gray", "purple"]
+
+
 class Unit:
 
     def __init__(self, cryptogram, frame, char):
@@ -9,7 +13,7 @@ class Unit:
         
         self.cryptogram = cryptogram
 
-        self.frame = Frame(frame, width=30, height=0)#, background="black")
+        self.frame = Frame(frame, width=30, height=0, background = choice(colors))#, background="black")
 
         self.text = Label(self.frame, text=char, font=("Times New Roman", 20))
         self.text.pack(side=BOTTOM)
