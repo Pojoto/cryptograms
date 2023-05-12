@@ -8,8 +8,8 @@ class Cryptogram:
 
     def __init__(self, root, text):
         self.frame = Frame(root)
-       
-       
+    
+        #self.rows, 
         self.entry_units = self.make_chunks(text)
 
         #self.entry_units = self.make_units(text)
@@ -26,44 +26,42 @@ class Cryptogram:
         row_index = 0
         col_index = 0
 
+        row = Frame(self.frame)
+
+        row.pack(anchor=W, padx=6, pady=4)
+
         for i, text_chunk in enumerate(text.split()):
 
             length = len(text_chunk)
 
             if col_index + length > max_row:
-                while col_index <= max_row:
-                    #TODO: try one chunk of a bunch of spaces next
-                    space_chunk = Chunk(self.frame, " ", self)
-                    space_chunk.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
-                    col_index += 1
+                
+                #start a new row
+                row = Frame(self.frame)
+
+                row.pack(anchor=W, padx=6, pady=4)
+
                 col_index = 0
                 row_index += 1
+
             elif length > max_row:
                 print("WORD IS TOO LONG")
 
-            chunk = Chunk(self.frame, text_chunk, self)
+            chunk = Chunk(row, text_chunk, self)
 
-            chunk.frame.grid(row = row_index, column = col_index, padx=2, sticky=N, columnspan=length)
+            chunk.frame.pack(side=LEFT)
 
             entry_units.extend(chunk.entry_units)
 
             col_index += length
 
-            if i == len(text.split()) - 1:
-                while col_index <= max_row:
-                    #TODO: try one chunk of a bunch of spaces next
-                    space_chunk = Chunk(self.frame, " ", self)
-                    space_chunk.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
-                    col_index += 1
-
+            #check if we need to add a space unit - if the word takes up till the end of the row, then don't need to add a space at the end
             if col_index < max_row:
-                space_chunk = Chunk(self.frame, " ", self)
-                space_chunk.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
-                # space_unit = Unit(self, self.frame, " ")
-                # space_unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
+                space_unit = SpaceUnit(self, row, ' ')
+                space_unit.frame.pack(side=LEFT)
+                #space_chunk = Chunk(row, " ", self)
+                #space_chunk.frame.pack(side=LEFT)
             
-
-
             col_index += 1
                 
         return entry_units  
