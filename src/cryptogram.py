@@ -9,10 +9,7 @@ class Cryptogram:
     def __init__(self, root, text):
         self.frame = Frame(root)
     
-        #self.rows, 
         self.entry_units = self.make_chunks(text)
-
-        #self.entry_units = self.make_units(text)
 
         #current focus is an entry unit object
         self.current_focus = None
@@ -47,7 +44,7 @@ class Cryptogram:
             elif length > max_row:
                 print("WORD IS TOO LONG")
 
-            chunk = Chunk(row, text_chunk, self)
+            chunk = Chunk(self, row, text_chunk)
 
             chunk.frame.pack(side=LEFT)
 
@@ -59,8 +56,6 @@ class Cryptogram:
             if col_index < max_row:
                 space_unit = SpaceUnit(self, row, ' ')
                 space_unit.frame.pack(side=LEFT)
-                #space_chunk = Chunk(row, " ", self)
-                #space_chunk.frame.pack(side=LEFT)
             
             col_index += 1
                 
