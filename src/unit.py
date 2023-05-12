@@ -13,10 +13,17 @@ class Unit:
         
         self.cryptogram = cryptogram
 
-        self.frame = Frame(frame, width=30, height=0, background = choice(colors))#, background="black")
+        self.frame = Frame(frame, width=30, height=0, bg="lightgray")#, background = choice(colors))#, background="black")
 
-        self.text = Label(self.frame, text=char, font=("Times New Roman", 20))
+        self.text = Label(self.frame, text=char, bg="lightgray", font=("Times New Roman", 20))
         self.text.pack(side=BOTTOM)
+
+class SpaceUnit(Unit):
+
+    def __init__(self, cryptogram, frame, char):
+        super().__init__(cryptogram, frame, char)
+
+        self.text.configure(width=2, bg="SystemButtonFace")
 
 
 
