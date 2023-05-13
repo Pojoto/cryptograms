@@ -14,8 +14,10 @@ class Cryptogram:
         #current focus is an entry unit object
         self.current_focus = None
 
-        #appearances is a dictionary with keys of letters, values of lists of entry units sharing that letter
+        #appearances is a dictionary with keys being letters, values being sets of entry units sharing that letter
         self.appearances = self.make_appearances()
+
+        self.add_freqs()
 
     def make_chunks(self, text):
         entry_units = []
@@ -61,31 +63,6 @@ class Cryptogram:
                 
         return entry_units  
 
-    def make_units(self, text):
-        entry_units = []
-        max_row = 15
-        row_index = 0
-        col_index = 0
-
-        for ch in text:
-
-            if col_index > max_row:
-                col_index = 0
-                row_index += 1
-            
-            if ch in alpha_set:
-                entry_unit = EntryUnit(self, self.frame, ch)
-                entry_unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
-                entry_units.append(entry_unit)
-            else:
-                unit = Unit(self, self.frame, ch)
-                unit.frame.grid(row = row_index, column = col_index, padx=2, sticky=N)
-            
-            col_index += 1
-        
-        return entry_units
-
-
     def copy_entry(self, label_char, user_char):
         for entry_unit in self.appearances[label_char]:
             entry_unit.entry.config(state="normal")
@@ -105,6 +82,11 @@ class Cryptogram:
                     appearances[letter] = {entry_unit}
         
         return appearances
+
+    def add_freqs(self):
+        for entry_unit in self.entry_units:
+            freq = len(self.appearances[entry_unit.char])
+            entry_unit.add_freq(freq)
                 
 
     def clear_answer(self):
