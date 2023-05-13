@@ -40,6 +40,9 @@ class EntryUnit(Unit):
         self.entry.bind("<FocusIn>", lambda event: self.cryptogram.click_focus(self))
         self.entry.bind("<Key>", self.check_character)
 
+    def add_freq(self, freq):
+        self.freq = Label(self.frame, text=freq, bg="lightgray", font=("Times New Roman", 20))
+        self.freq.pack()
     
     #function handling which characters are pressed, how to react
     def check_character(self, event):
