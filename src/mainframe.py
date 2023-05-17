@@ -3,6 +3,7 @@ from unit import *
 from cryptogram import Cryptogram
 from random import shuffle, choice
 from alphabet import alpha_list
+import time
 import string
 
 def encrypt(plaintext):
@@ -55,6 +56,7 @@ class MainFrame:
         self.cryptogram.clear_answer()
     
     def enter_pressed(self, event):
+        print(time.time())
         self.check_answer()
 
     def check_answer(self):
