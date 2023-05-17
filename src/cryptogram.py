@@ -17,6 +17,8 @@ class Cryptogram:
         #appearances is a dictionary with keys being letters, values being sets of entry units sharing that letter
         self.appearances = self.make_appearances()
 
+        self.inputs = set()
+
         self.add_freqs()
 
     def make_chunks(self, text):
@@ -61,14 +63,31 @@ class Cryptogram:
             
             col_index += 1
                 
-        return entry_units  
+        return entry_units
+
 
     def copy_entry(self, label_char, user_char):
+
+        dupe = False
+
+        if user_char in self.inputs:
+            print("dupe")
+            dupe = True
+
         for entry_unit in self.appearances[label_char]:
             entry_unit.entry.config(state="normal")
+            if dupe:
+                entry_unit.entry.config(bg="yellow")
+                print("color")
             entry_unit.entry.delete(0, END)
             entry_unit.entry.insert(0, user_char)
             entry_unit.entry.config(state="readonly")
+
+            
+
+
+
+
         
     #each key in the dict is a letter, the values are a list of all the entry units of that letter in the cryptogram
     def make_appearances(self):

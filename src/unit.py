@@ -48,6 +48,10 @@ class EntryUnit(Unit):
     #function handling which characters are pressed, how to react
     def check_character(self, event):
         char = event.char.upper()
+
+        current_text = self.entry.get()
+        if current_text in alpha_set:
+            self.cryptogram.inputs.remove(current_text)
         
         #print(event.keycode)
 
@@ -67,5 +71,8 @@ class EntryUnit(Unit):
             self.cryptogram.set_prev_focus()
         elif event.keycode == 39: # check if right arrow was pressed - go to next entry
             self.cryptogram.set_next_focus()
+        
+                
+        self.cryptogram.inputs.add(char)
 
 
