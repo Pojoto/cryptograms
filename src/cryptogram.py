@@ -76,17 +76,11 @@ class Cryptogram:
 
         for entry_unit in self.appearances[label_char]:
             entry_unit.entry.config(state="normal")
-            if dupe:
-                entry_unit.entry.config(bg="yellow")
-                print("color")
             entry_unit.entry.delete(0, END)
             entry_unit.entry.insert(0, user_char)
             entry_unit.entry.config(state="readonly")
-
-            
-
-
-
+            if dupe is True:
+                entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
 
         
     #each key in the dict is a letter, the values are a list of all the entry units of that letter in the cryptogram

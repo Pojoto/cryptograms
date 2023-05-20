@@ -1,6 +1,7 @@
 from tkinter import *
 from random import randint
 from alphabet import alpha_set
+from collections import Counter
 
 from random import choice
 colors = ["red", "blue", "green", "yellow", "orange", "pink", "brown", "gray", "purple"]
@@ -33,7 +34,8 @@ class EntryUnit(Unit):
 
         super().__init__(cryptogram, frame, char)
 
-        self.entry = Entry(self.frame, width=2, font=("Times New Roman", 20), state='readonly', cursor="arrow")
+        self.entry = Entry(self.frame, width=2, font=("Times New Roman", 20), state='readonly', cursor="arrow",
+                           highlightthickness=2, highlightbackground="lightgray", highlightcolor="lightgray")
         self.entry.grid(row = 0, column = 0, padx=5,pady=5)
 
         #pass the current entry unit object(self) to the click focus function in cryptogram manager 
@@ -74,5 +76,7 @@ class EntryUnit(Unit):
         
                 
         self.cryptogram.inputs.add(char)
+
+        print(self.cryptogram.inputs)
 
 
