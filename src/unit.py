@@ -52,8 +52,6 @@ class EntryUnit(Unit):
         char = event.char.upper()
 
         current_text = self.entry.get()
-        if current_text in alpha_set:
-            self.cryptogram.inputs.remove(current_text)
         
         #print(event.keycode)
 
@@ -73,10 +71,4 @@ class EntryUnit(Unit):
             self.cryptogram.set_prev_focus()
         elif event.keycode == 39: # check if right arrow was pressed - go to next entry
             self.cryptogram.set_next_focus()
-        
-                
-        self.cryptogram.inputs.add(char)
-
-        print(self.cryptogram.inputs)
-
 

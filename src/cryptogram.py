@@ -80,7 +80,7 @@ class Cryptogram:
     def copy_entry(self, label_char, user_char):
 
         dupe = False
-        if user_char in self.key_dict.values():
+        if user_char != "" and user_char in self.key_dict.values():
             dupe = True
             for key, value in self.key_dict.items():
                 if value == user_char:
@@ -123,6 +123,7 @@ class Cryptogram:
         for entry_unit in self.entry_units:
             entry = entry_unit.entry
             entry.config(state="normal")
+            entry.config(highlightbackground="lightgray", highlightcolor="lightgray")
             entry.delete(0, END)
             entry.config(state="readonly")
 
