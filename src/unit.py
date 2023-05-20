@@ -64,7 +64,7 @@ class EntryUnit(Unit):
             self.cryptogram.set_next_focus()
             
         elif event.keycode == 8: #check if backspace was pressed
-            self.cryptogram.copy_entry(self.char, "") #remove all characters of the shared entries (replace them with space)
+            self.cryptogram.copy_entry(self.char, "") #remove all characters of the shared entries (replace them with empty)
             self.cryptogram.set_prev_focus()
         elif event.keycode == 32: #check if space was pressed
             self.cryptogram.copy_entry(self.char, "")

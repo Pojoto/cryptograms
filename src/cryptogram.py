@@ -2,6 +2,7 @@ from tkinter import *
 from unit import *
 from alphabet import alpha_set
 from text_chunk import Chunk
+from collections import Counter
 
 
 class Cryptogram:
@@ -17,7 +18,7 @@ class Cryptogram:
         #appearances is a dictionary with keys being letters, values being sets of entry units sharing that letter
         self.appearances = self.make_appearances()
 
-        self.inputs = set()
+        self.inputs = Counter()
 
         self.add_freqs()
 
@@ -69,6 +70,7 @@ class Cryptogram:
     def copy_entry(self, label_char, user_char):
 
         dupe = False
+
 
         if user_char in self.inputs:
             print("dupe")
