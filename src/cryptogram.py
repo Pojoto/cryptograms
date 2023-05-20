@@ -20,7 +20,17 @@ class Cryptogram:
 
         self.inputs = Counter()
 
+        self.key_dict = self.make_key(text)
+
         self.add_freqs()
+    
+    def make_key(self, text):
+        key = {}
+
+        for letter in text:
+            if letter in alpha_set and letter not in key:
+                key[letter] = ""
+        return key
 
     def make_chunks(self, text):
         entry_units = []
@@ -70,18 +80,23 @@ class Cryptogram:
     def copy_entry(self, label_char, user_char):
 
         dupe = False
-
-
-        if user_char in self.inputs:
-            print("dupe")
+        if user_char in self.key_dict.values():
             dupe = True
+            for key, value in self.key_dict.items():
+                if value == user_char:
+                    for entry_unit in self.appearances[key]:
+                        entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
+                    break
+            
+        self.key_dict[label_char] = user_char
+
 
         for entry_unit in self.appearances[label_char]:
             entry_unit.entry.config(state="normal")
             entry_unit.entry.delete(0, END)
             entry_unit.entry.insert(0, user_char)
             entry_unit.entry.config(state="readonly")
-            if dupe is True:
+            if dupe:
                 entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
 
         
