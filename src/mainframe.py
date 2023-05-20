@@ -2,27 +2,41 @@ from tkinter import *
 from unit import *
 from cryptogram import Cryptogram
 from random import shuffle, choice
-from alphabet import alpha_list
+from alphabet import alpha_list, alpha_set
 import time
 import string
 
-def encrypt(plaintext):
+
+def encrypt_and_key(plaintext):
 
     plaintext = plaintext.upper()
-    
-    random_chars = alpha_list.copy()
-    shuffle(random_chars)
 
-    key = {plain: cipher for plain, cipher in zip(alpha_list, random_chars)}
+    key_dict = {}
+
+    for letter in plaintext:
+        if letter in alpha_set and letter not in key_dict:
+            key_dict[letter] = ""
+
+    #
+    main_set = alpha_set.copy()
+    for plainkey in key_dict:
+        temp_set = main_set.copy()
+        try:
+            temp_set.remove(plainkey)
+        except:
+            pass
+        ciphertext = choice(tuple(temp_set))
+        main_set.remove(ciphertext)
+        key_dict[plainkey] = ciphertext
 
     ciphertext = ""
     for ch in plaintext:
-        if ch in key:
-            ciphertext += key[ch]
+        if ch in key_dict:
+            ciphertext += key_dict[ch]
         else:
             ciphertext += ch
-    
-    return ciphertext
+    print(ciphertext)
+    return ciphertext#, key
 
 
 class MainFrame:
@@ -50,7 +64,7 @@ class MainFrame:
     def new_quote(self):
         quote = choice(self.quotes)
         self.plaintext = quote
-        self.ciphertext = encrypt(quote)
+        self.ciphertext = encrypt_and_key(quote)
 
     def clear(self):
         self.cryptogram.clear_answer()
