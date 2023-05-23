@@ -20,8 +20,6 @@ class Cryptogram:
         #appearances is a dictionary with keys being letters, values being sets of entry units sharing that letter
         self.appearances = self.make_appearances()
 
-        self.inputs = Counter()
-
         self.key_dict = self.make_key(text)
 
         #self.add_freqs()
@@ -36,7 +34,7 @@ class Cryptogram:
 
     def make_chunks(self, text):
         entry_units = []
-        max_row = 15
+        max_row = 20
         row_index = 0
         col_index = 0
 
@@ -123,15 +121,6 @@ class Cryptogram:
             elif counter[user_char] > 1:
                 entry_unit.entry.config(highlightbackground="red", highlightcolor="red")
                 
-                
-        
-
-
-    # def add_freqs(self):
-    #     for entry_unit in self.entry_units:
-    #         freq = len(self.appearances[entry_unit.char])
-    #         entry_unit.add_freq(freq)
-                
 
     def clear_answer(self):
         for entry_unit in self.entry_units:
@@ -158,7 +147,7 @@ class Cryptogram:
             entry_unit.entry.config(readonlybackground="orange")
         unit_to_focus.entry.config(readonlybackground="red")
 
-        self.current_focus.entry.focus_set()
+        unit_to_focus.entry.focus_set()
     
 
     def click_focus(self, entry_unit):
@@ -186,7 +175,6 @@ class Cryptogram:
             current = self.entry_units[index]
         
         self.update_focus(current)
-        #current.entry.focus_set()
 
     def set_prev_focus(self):
         index = self.entry_units.index(self.current_focus)
@@ -194,7 +182,6 @@ class Cryptogram:
         if index - 1 >= 0:
             prev_focus = self.entry_units[index - 1]
             self.update_focus(prev_focus)
-            #prev_focus.entry.focus_set()
     
     def self_destruct(self):
         self.frame.destroy()
