@@ -75,30 +75,6 @@ class Cryptogram:
             col_index += 1
                 
         return entry_units
-
-
-    def copy_entry(self, label_char, user_char):
-
-        dupe = False
-        if user_char != "" and user_char in self.key_dict.values():
-            dupe = True
-            for key, value in self.key_dict.items():
-                if value == user_char:
-                    for entry_unit in self.appearances[key]:
-                        entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
-                    break
-            
-        self.key_dict[label_char] = user_char
-
-
-        for entry_unit in self.appearances[label_char]:
-            entry_unit.entry.config(state="normal")
-            entry_unit.entry.delete(0, END)
-            entry_unit.entry.insert(0, user_char)
-            entry_unit.entry.config(state="readonly")
-            if dupe:
-                entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
-
         
     #each key in the dict is a letter, the values are a list of all the entry units of that letter in the cryptogram
     def make_appearances(self):
@@ -112,6 +88,29 @@ class Cryptogram:
                     appearances[letter] = {entry_unit}
         
         return appearances
+
+    def copy_entry(self, label_char, user_char):
+
+        dupe = False
+        if user_char != "" and user_char in self.key_dict.values():
+            dupe = True
+            for key, value in self.key_dict.items():
+                if value == user_char:
+                    for entry_unit in self.appearances[key]:
+                        entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
+                    break
+            
+        self.key_dict[label_char] = user_char
+        print(self.key_dict)
+
+
+        for entry_unit in self.appearances[label_char]:
+            entry_unit.entry.config(state="normal")
+            entry_unit.entry.delete(0, END)
+            entry_unit.entry.insert(0, user_char)
+            entry_unit.entry.config(state="readonly")
+            if dupe:
+                entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
 
     def add_freqs(self):
         for entry_unit in self.entry_units:
