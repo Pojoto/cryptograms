@@ -14,7 +14,7 @@ class Unit:
         
         self.cryptogram = cryptogram
 
-        self.frame = Frame(frame, width=30, height=0, bg="lightgray")#, background = choice(colors))#, background="black")
+        self.frame = Frame(frame, bg="lightgray")#, background = choice(colors))#, background="black")
 
         self.text = Label(self.frame, text=char, bg="lightgray", font=("Times New Roman", 20))
         self.text.grid(row = 1, column = 0)
@@ -36,7 +36,7 @@ class EntryUnit(Unit):
 
         self.entry = Entry(self.frame, width=2, font=("Times New Roman", 20), state='readonly', cursor="arrow",
                            highlightthickness=2, highlightbackground="lightgray", highlightcolor="lightgray")
-        self.entry.grid(row = 0, column = 0, padx=5,pady=5)
+        self.entry.grid(row = 0, column = 0, padx=3,pady=3)
 
         #pass the current entry unit object(self) to the click focus function in cryptogram manager 
         self.entry.bind("<FocusIn>", lambda event: self.cryptogram.click_focus(self))
