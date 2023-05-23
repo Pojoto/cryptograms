@@ -34,8 +34,22 @@ with open("quotes.txt", "r") as quotes_file:
     global quotes
     quotes = [line.rstrip() for line in quotes_file]
 
-cryptogram = MainFrame(root, quotes)
-cryptogram.frame.pack(expand=True, anchor=CENTER)
+def start(start_frame):
+    start_frame.destroy()
+    main_frame = MainFrame(root, quotes)
+    main_frame.frame.pack(expand=True, anchor=CENTER)
+
+def start_menu(root):
+    frame = Frame(root)
+    title = Label(frame, text="Cryptograms", font=("Courier", 100))
+    start_button = Button(frame, text="Start", font=("Courier", 20), command=lambda *args: start(frame))
+    title.pack()
+    start_button.pack()
+    frame.pack(expand=True, anchor=CENTER)
+
+
+start_menu(root)
+
 
 
 root.mainloop()
