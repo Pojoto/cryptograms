@@ -93,14 +93,14 @@ class Cryptogram:
 
     def copy_entry(self, label_char, user_char):
 
-        dupe = False
-        if user_char != "" and user_char in self.key_dict.values():
-            dupe = True
-            for key, value in self.key_dict.items():
-                if value == user_char:
-                    for entry_unit in self.appearances[key]:
-                        entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
-                    break
+        # dupe = False
+        # if user_char != "" and user_char in self.key_dict.values():
+        #     dupe = True
+        #     for key, value in self.key_dict.items():
+        #         if value == user_char:
+        #             for entry_unit in self.appearances[key]:
+        #                 entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
+        #             break
             
         self.key_dict[label_char] = user_char
         print(self.key_dict)
@@ -111,8 +111,21 @@ class Cryptogram:
             entry_unit.entry.delete(0, END)
             entry_unit.entry.insert(0, user_char)
             entry_unit.entry.config(state="readonly")
-            if dupe:
-                entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
+            # if dupe:
+            #     entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
+
+        counter = Counter(self.key_dict.values())
+
+        for entry_unit in self.entry_units:
+            user_char = entry_unit.entry.get()
+            if len(user_char) == 0 or counter[user_char] == 1:
+                entry_unit.entry.config(highlightbackground="lightgray", highlightcolor="lightgray")
+            elif counter[user_char] > 1:
+                entry_unit.entry.config(highlightbackground="red", highlightcolor="red")
+                
+                
+        
+
 
     # def add_freqs(self):
     #     for entry_unit in self.entry_units:
@@ -127,6 +140,11 @@ class Cryptogram:
             entry.config(highlightbackground="lightgray", highlightcolor="lightgray")
             entry.delete(0, END)
             entry.config(state="readonly")
+        
+        for ciphertext in self.key_dict:
+            self.key_dict[ciphertext] = ""
+        
+        self.update_focus(self.entry_units[0])
 
         self.entry_units[0].entry.focus_set()
         self.current_focus = self.entry_units[0]
@@ -142,6 +160,7 @@ class Cryptogram:
         for entry_unit in self.appearances[newletter]:
             entry_unit.entry.config(readonlybackground="orange")
         unit_to_focus.entry.config(readonlybackground="red")
+    
 
     def click_focus(self, entry_unit):
         print(entry_unit.char)
