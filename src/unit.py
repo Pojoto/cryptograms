@@ -42,6 +42,9 @@ class EntryUnit(Unit):
         self.entry.bind("<FocusIn>", lambda event: self.cryptogram.click_focus(self))
         self.entry.bind("<Key>", self.check_character)
 
+        self.freq = Label(self.frame, text=self.cryptogram.freqs[char], bg="lightgray", font=("Times New Roman", 20))
+        self.freq.grid(row = 2, column = 0)
+
     def add_freq(self, freq):
         self.freq = Label(self.frame, text=freq, bg="lightgray", font=("Times New Roman", 20))
         self.freq.grid(row = 2, column = 0)

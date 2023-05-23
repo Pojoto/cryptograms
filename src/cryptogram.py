@@ -7,8 +7,10 @@ from collections import Counter
 
 class Cryptogram:
 
-    def __init__(self, root, text):
+    def __init__(self, root, text, freqs):
         self.frame = Frame(root)
+
+        self.freqs = freqs
     
         self.entry_units = self.make_chunks(text)
 
@@ -22,7 +24,7 @@ class Cryptogram:
 
         self.key_dict = self.make_key(text)
 
-        self.add_freqs()
+        #self.add_freqs()
     
     def make_key(self, text):
         key = {}
@@ -112,10 +114,10 @@ class Cryptogram:
             if dupe:
                 entry_unit.entry.config(highlightthickness=2, highlightbackground="red", highlightcolor="red")
 
-    def add_freqs(self):
-        for entry_unit in self.entry_units:
-            freq = len(self.appearances[entry_unit.char])
-            entry_unit.add_freq(freq)
+    # def add_freqs(self):
+    #     for entry_unit in self.entry_units:
+    #         freq = len(self.appearances[entry_unit.char])
+    #         entry_unit.add_freq(freq)
                 
 
     def clear_answer(self):
@@ -126,12 +128,8 @@ class Cryptogram:
             entry.delete(0, END)
             entry.config(state="readonly")
 
-    def get_answer(self):
-        user_answer = ""
-        for entry_unit in self.entry_units:
-            entry = entry_unit.entry
-            user_answer += entry.get().upper()
-        return user_answer
+        self.entry_units[0].entry.focus_set()
+        self.current_focus = self.entry_units[0]
     
     def update_focus(self, unit_to_focus):
         if self.current_focus is not None:
