@@ -145,9 +145,6 @@ class Cryptogram:
             self.key_dict[ciphertext] = ""
         
         self.update_focus(self.entry_units[0])
-
-        self.entry_units[0].entry.focus_set()
-        self.current_focus = self.entry_units[0]
     
     def update_focus(self, unit_to_focus):
         if self.current_focus is not None:
@@ -160,6 +157,8 @@ class Cryptogram:
         for entry_unit in self.appearances[newletter]:
             entry_unit.entry.config(readonlybackground="orange")
         unit_to_focus.entry.config(readonlybackground="red")
+
+        self.current_focus.entry.focus_set()
     
 
     def click_focus(self, entry_unit):
@@ -187,7 +186,7 @@ class Cryptogram:
             current = self.entry_units[index]
         
         self.update_focus(current)
-        current.entry.focus_set()
+        #current.entry.focus_set()
 
     def set_prev_focus(self):
         index = self.entry_units.index(self.current_focus)
@@ -195,7 +194,7 @@ class Cryptogram:
         if index - 1 >= 0:
             prev_focus = self.entry_units[index - 1]
             self.update_focus(prev_focus)
-            prev_focus.entry.focus_set()
+            #prev_focus.entry.focus_set()
     
     def self_destruct(self):
         self.frame.destroy()
