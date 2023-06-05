@@ -6,7 +6,7 @@ from alphabet import alpha_set
 from random import choice
 colors = ["red", "blue", "green", "yellow", "orange", "pink", "brown", "gray", "purple"]
 
-PAD = 3
+PAD = 2
 
 class Chunk:
 
