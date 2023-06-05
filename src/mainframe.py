@@ -54,11 +54,16 @@ class MainFrame:
 
         self.frame = Frame(window)#window, width=600, height=400)
 
-        enter_button = Button(self.frame, text="Enter", command=self.check_answer)
-        enter_button.pack(side=BOTTOM)
+        self.enter_button = Button(self.frame, text="Enter", command=self.check_answer)
+        self.enter_button.pack(side=BOTTOM)
 
-        clear_button = Button(self.frame, text="Clear", command=self.clear)
-        clear_button.pack(side=BOTTOM)
+        self.clear_button = Button(self.frame, text="Clear", command=self.clear)
+        self.clear_button.pack(side=BOTTOM)
+
+        self.prev_time = Label(self.frame, text="Previous Solve Time: ")
+        self.prev_time.pack(side=BOTTOM)
+
+        self.start_time = time.time()
 
         self.new_cryptogram()
 
@@ -69,6 +74,9 @@ class MainFrame:
         self.cryptogram = Cryptogram(self.frame, self.ciphertext, self.freqs)
         self.cryptogram.entry_units[0].entry.focus_set() #set focus to first entry
         self.cryptogram.frame.pack()
+        diff = time.time() - self.start_time
+        self.prev_time.configure(text="Previous Solve Time: " + str(diff))
+        self.start_time = time.time()
     
     def new_quote(self):
         quote = choice(self.quotes)
