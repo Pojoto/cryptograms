@@ -14,8 +14,6 @@ def encrypt_key_freq(plaintext):
 
     key_dict = {}
 
-    freq_dict = {}
-
     freqs = Counter()
 
     main_set = alpha_set.copy()
@@ -34,8 +32,6 @@ def encrypt_key_freq(plaintext):
                 key_dict[letter] = ciphertext
 
             freqs[key_dict[letter]] += 1
-    
-    print(freqs)
 
     ciphertext = ""
     for ch in plaintext:
@@ -68,7 +64,7 @@ class MainFrame:
         self.cryptogram.entry_units[0].entry.focus_set()
         self.cryptogram.frame.pack()
 
-        window.bind("<Return>", self.enter_pressed)#print("hi"))
+        window.bind("<Return>", self.enter_pressed)
 
     
     def new_quote(self):
@@ -85,9 +81,6 @@ class MainFrame:
             
     def check_answer(self):
 
-        print(self.cryptogram.key_dict)
-        print(self.key_dict)
-
         if self.cryptogram.key_dict == self.key_dict:
             print("CORRECT!")
             self.cryptogram.self_destruct()
@@ -97,6 +90,3 @@ class MainFrame:
             self.cryptogram.frame.pack()
         else:
             print("WRONG!")
-
-    
-    #TODO: make the cryptogram class have its own frame
