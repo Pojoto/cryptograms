@@ -60,12 +60,15 @@ class MainFrame:
         clear_button = Button(self.frame, text="Clear", command=self.clear)
         clear_button.pack(side=BOTTOM)
 
-        self.cryptogram = Cryptogram(self.frame, self.ciphertext, self.freqs)
-        self.cryptogram.entry_units[0].entry.focus_set()
-        self.cryptogram.frame.pack()
+        self.new_cryptogram()
 
         window.bind("<Return>", self.enter_pressed)
 
+    def new_cryptogram(self):
+        self.new_quote()
+        self.cryptogram = Cryptogram(self.frame, self.ciphertext, self.freqs)
+        self.cryptogram.entry_units[0].entry.focus_set() #set focus to first entry
+        self.cryptogram.frame.pack()
     
     def new_quote(self):
         quote = choice(self.quotes)
@@ -84,9 +87,6 @@ class MainFrame:
         if self.cryptogram.key_dict == self.key_dict:
             print("CORRECT!")
             self.cryptogram.self_destruct()
-            self.new_quote()
-            self.cryptogram = Cryptogram(self.frame, self.ciphertext, self.freqs)
-            self.cryptogram.entry_units[0].entry.focus_set() #set focus to first entry
-            self.cryptogram.frame.pack()
+            self.new_cryptogram()
         else:
             print("WRONG!")
