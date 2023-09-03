@@ -54,11 +54,19 @@ class MainFrame:
 
         self.frame = Frame(window)#window, width=600, height=400)
 
-        self.enter_button = Button(self.frame, text="Enter", command=self.check_answer)
-        self.enter_button.pack(side=BOTTOM)
+        self.button_frame = Frame(self.frame)
+        self.button_frame.pack(side=BOTTOM)
 
-        self.clear_button = Button(self.frame, text="Clear", command=self.clear)
-        self.clear_button.pack(side=BOTTOM)
+
+
+        self.enter_button = Button(self.button_frame, text="Enter", command=self.check_answer)
+        self.enter_button.pack(side=LEFT)
+
+        self.clear_button = Button(self.button_frame, text="Clear", command=self.clear)
+        self.clear_button.pack(side=LEFT)
+
+        self.skip_button = Button(self.button_frame, text="Skip", command=self.skip)
+        self.skip_button.pack(side=LEFT)
 
         self.prev_time = Label(self.frame, text="Previous Solve Time: ")
         self.prev_time.pack(side=BOTTOM)
@@ -89,6 +97,10 @@ class MainFrame:
     def enter_pressed(self, event):
         print(time.time())
         self.check_answer()
+    
+    def skip(self):
+        self.cryptogram.self_destruct()
+        self.new_cryptogram()
             
     def check_answer(self):
 
