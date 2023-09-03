@@ -19,5 +19,5 @@ Make sure quotes are not too long, as they get cut off in tkinter (I'll likely f
 
 
 
-# Notes
+### Notes
 This tool isn't necessarily finished, although it is functional. Some new features may be added in the future. If you have suggestions or want to help, let me know!
